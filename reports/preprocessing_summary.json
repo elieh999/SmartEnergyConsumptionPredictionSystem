@@ -1,0 +1,29 @@
+{
+  "source": "UCI Individual Household Electric Power Consumption dataset",
+  "raw_rows": 2075259,
+  "rows_with_missing_measurements_removed": 25979,
+  "clean_minute_rows": 2049280,
+  "hourly_rows_before_lag_target_cleanup": 34589,
+  "model_ready_hourly_rows": 33972,
+  "train_rows": 23780,
+  "validation_rows": 5096,
+  "test_rows": 5096,
+  "target": "power_next_hour: Global Active Power one hour after the input hour",
+  "feature_columns": [
+    "global_active_power_current",
+    "global_reactive_power_mean",
+    "voltage_mean",
+    "global_intensity_mean",
+    "sub_metering_1_sum",
+    "sub_metering_2_sum",
+    "sub_metering_3_sum",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "power_lag_1",
+    "power_lag_2",
+    "power_lag_24"
+  ],
+  "split_method": "chronological 70% train, 15% validation, 15% test; no shuffling"
+}

@@ -1,0 +1,17 @@
+# Original UCI download and generated data are kept locally only
+data/raw/
+data/processed/
+
+# Temporary report preview files
+.report_preview/
+
+# Personal project notes
+where we found them.txt
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local environment files
+.venv/
+venv/
