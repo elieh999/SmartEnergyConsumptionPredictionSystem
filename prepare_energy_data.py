@@ -6,6 +6,7 @@ chronological train, validation, and test splits.  It does not train a model.
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -40,16 +41,41 @@ def chronological_split(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame
     )
 
 
-def main() -> None:
-    if not RAW_FILE.exists():
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Prepare the UCI household electricity dataset for next-hour forecasting."
+    )
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=RAW_FILE,
+        help=f"raw household_power_consumption.txt file (default: {RAW_FILE})",
+    )
+    parser.add_argument(
+        "--processed-dir",
+        type=Path,
+        default=PROCESSED_DIR,
+        help=f"directory for generated CSV and scaler files (default: {PROCESSED_DIR})",
+    )
+    parser.add_argument(
+        "--reports-dir",
+        type=Path,
+        default=REPORTS_DIR,
+        help=f"directory for the preprocessing summary (default: {REPORTS_DIR})",
+    )
+    return parser
+
+
+def prepare_dataset(raw_file: Path, processed_dir: Path, reports_dir: Path) -> dict[str, object]:
+    if not raw_file.exists():
         raise FileNotFoundError(
-            f"Raw dataset not found: {RAW_FILE}. Download and extract the UCI dataset first."
+            f"Raw dataset not found: {raw_file}. Download and extract the UCI dataset first."
         )
 
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    reports_dir.mkdir(parents=True, exist_ok=True)
 
-    raw = pd.read_csv(RAW_FILE, sep=";", na_values="?", low_memory=False)
+    raw = pd.read_csv(raw_file, sep=";", na_values="?", low_memory=False)
     original_rows = len(raw)
 
     raw["Datetime"] = pd.to_datetime(
@@ -124,13 +150,13 @@ def main() -> None:
         scaled[feature_columns] = (scaled[feature_columns] - means) / scales
         return scaled
 
-    model_data.to_csv(PROCESSED_DIR / "hourly_model_data.csv", index=False)
-    train.to_csv(PROCESSED_DIR / "train_unscaled.csv", index=False)
-    validation.to_csv(PROCESSED_DIR / "validation_unscaled.csv", index=False)
-    test.to_csv(PROCESSED_DIR / "test_unscaled.csv", index=False)
-    scale_split(train).to_csv(PROCESSED_DIR / "train_scaled.csv", index=False)
-    scale_split(validation).to_csv(PROCESSED_DIR / "validation_scaled.csv", index=False)
-    scale_split(test).to_csv(PROCESSED_DIR / "test_scaled.csv", index=False)
+    model_data.to_csv(processed_dir / "hourly_model_data.csv", index=False)
+    train.to_csv(processed_dir / "train_unscaled.csv", index=False)
+    validation.to_csv(processed_dir / "validation_unscaled.csv", index=False)
+    test.to_csv(processed_dir / "test_unscaled.csv", index=False)
+    scale_split(train).to_csv(processed_dir / "train_scaled.csv", index=False)
+    scale_split(validation).to_csv(processed_dir / "validation_scaled.csv", index=False)
+    scale_split(test).to_csv(processed_dir / "test_scaled.csv", index=False)
 
     scaler_details = {
         "method": "z-score standardization: (x - training_mean) / training_standard_deviation",
@@ -138,7 +164,7 @@ def main() -> None:
         "training_means": means.to_dict(),
         "training_scales": scales.to_dict(),
     }
-    (PROCESSED_DIR / "feature_scaler.json").write_text(
+    (processed_dir / "feature_scaler.json").write_text(
         json.dumps(scaler_details, indent=2), encoding="utf-8"
     )
 
@@ -156,9 +182,16 @@ def main() -> None:
         "feature_columns": feature_columns,
         "split_method": "chronological 70% train, 15% validation, 15% test; no shuffling",
     }
-    (REPORTS_DIR / "preprocessing_summary.json").write_text(
+    (reports_dir / "preprocessing_summary.json").write_text(
         json.dumps(summary, indent=2), encoding="utf-8"
     )
+
+    return summary
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    summary = prepare_dataset(args.input, args.processed_dir, args.reports_dir)
 
     print(json.dumps(summary, indent=2))
 
