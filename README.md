@@ -47,6 +47,14 @@ The raw dataset and generated CSV files are not stored here because they are lar
 3. Install pandas with `pip install pandas`.
 4. Run `python prepare_energy_data.py`.
 
+Run `python prepare_energy_data.py --help` to see the available paths. For example, you can
+keep the downloaded file elsewhere and write generated files to temporary folders:
+
+```bash
+python prepare_energy_data.py --input path/to/household_power_consumption.txt \
+  --processed-dir output/data --reports-dir output/reports
+```
+
 ## AI acknowledgement
 
 AI tools were used for understanding the project requirements, dataset exploration, and preprocessing code guidance. We reviewed the preprocessing process and remain responsible for the project decisions, analysis, and final report.
