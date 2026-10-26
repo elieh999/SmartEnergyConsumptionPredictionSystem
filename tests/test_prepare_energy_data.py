@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from prepare_energy_data import build_parser, chronological_split, prepare_dataset
 
@@ -41,3 +42,26 @@ def test_missing_custom_input_reports_its_path(tmp_path: Path) -> None:
         assert str(missing) in str(error)
     else:
         raise AssertionError("prepare_dataset accepted a missing input file")
+
+
+def test_too_little_data_is_rejected_before_writing_empty_splits(tmp_path: Path) -> None:
+    raw_file = tmp_path / "short.txt"
+    rows = []
+    for timestamp in pd.date_range("2026-01-01", periods=26, freq="h"):
+        rows.append(
+            {
+                "Date": timestamp.strftime("%d/%m/%Y"),
+                "Time": timestamp.strftime("%H:%M:%S"),
+                "Global_active_power": 1.0,
+                "Global_reactive_power": 0.1,
+                "Voltage": 230.0,
+                "Global_intensity": 4.0,
+                "Sub_metering_1": 0.0,
+                "Sub_metering_2": 0.0,
+                "Sub_metering_3": 0.0,
+            }
+        )
+    pd.DataFrame(rows).to_csv(raw_file, sep=";", index=False)
+
+    with pytest.raises(ValueError, match="fewer than four model-ready hourly rows"):
+        prepare_dataset(raw_file, tmp_path / "processed", tmp_path / "reports")
