@@ -122,12 +122,6 @@ def prepare_dataset(raw_file: Path, processed_dir: Path, reports_dir: Path) -> d
     model_data = hourly.dropna().reset_index()
     model_data = model_data.rename(columns={"Datetime": "datetime"})
 
-    if len(model_data) < 4:
-        raise ValueError(
-            "The dataset produced fewer than four model-ready hourly rows. "
-            "Provide a longer continuous time range before creating train, validation, and test splits."
-        )
-
     feature_columns = [
         "global_active_power_current",
         "global_reactive_power_mean",
