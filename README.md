@@ -27,9 +27,13 @@ We created hour, day of week, month, weekend status, and historical power featur
 
 The target is global active power one hour in the future. The final prepared data contains 33,972 hourly observations. The data was divided chronologically into 70% training, 15% validation, and 15% test data. The input features were normalized using the training data mean and standard deviation.
 
-## Model
+## Models
 
-The selected machine learning model is Multiple Linear Regression. It fits this project because the target is a continuous numerical value. It will be used as the first model and baseline before trying more advanced models later.
+Multiple Linear Regression is the machine learning baseline. It fits this project because the target is a continuous numerical value.
+
+The deep learning model is Long Short Term Memory, LSTM. LSTM is suitable for this project because electricity consumption is time based data. It will use the completed readings from the previous 24 hours to predict the average global active power for the following hour. The planned network has one LSTM layer with 32 units and one output neuron.
+
+Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
 
 ## Files
 
