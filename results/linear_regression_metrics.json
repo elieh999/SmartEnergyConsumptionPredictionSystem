@@ -1,0 +1,18 @@
+{
+  "model": "Multiple Linear Regression",
+  "target": "power_next_hour in kW",
+  "training_rows": 23780,
+  "validation_rows": 5096,
+  "test_rows": 5096,
+  "feature_count": 14,
+  "validation_metrics": {
+    "mae_kw": 0.4492768119248308,
+    "rmse_kw": 0.6248146153629808,
+    "r_squared": 0.5117412029995495
+  },
+  "test_metrics": {
+    "mae_kw": 0.3861705365698862,
+    "rmse_kw": 0.5244331053864867,
+    "r_squared": 0.45553205708870514
+  }
+}

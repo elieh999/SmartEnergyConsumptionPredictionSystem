@@ -31,6 +31,8 @@ The target is global active power one hour in the future. The final prepared dat
 
 Multiple Linear Regression is the machine learning baseline. It fits this project because the target is a continuous numerical value.
 
+The baseline was trained on 23,780 chronological training observations and tested on 5,096 later observations. Its test MAE is 0.386 kW, its RMSE is 0.524 kW, and its R squared value is 0.456. These values will be compared with the LSTM results when that model is trained.
+
 The deep learning model is Long Short Term Memory, LSTM. LSTM is suitable for this project because electricity consumption is time based data. It will use the completed readings from the previous 24 hours to predict the average global active power for the following hour. The planned network has one LSTM layer with 32 units and one output neuron.
 
 Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
@@ -38,7 +40,10 @@ Both models will use the same chronological data split. Their predictions will b
 ## Files
 
 * `prepare_energy_data.py` prepares the data for modeling.
+* `train_linear_regression.py` trains and evaluates the Multiple Linear Regression baseline.
 * `reports/preprocessing_summary.json` contains the preprocessing results and row counts.
+* `results/` contains model metrics, coefficients, and test predictions.
+* `models/linear_regression_model.json` contains the learned baseline model parameters.
 * `docs/AI_Project_Report.docx` is the current project report.
 * `data/README.md` explains how to get the original dataset.
 

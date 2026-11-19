@@ -1,0 +1,37 @@
+{
+  "model": "Multiple Linear Regression using ordinary least squares",
+  "target": "power_next_hour",
+  "intercept": 1.0857301662410888,
+  "feature_columns": [
+    "global_active_power_current",
+    "global_reactive_power_mean",
+    "voltage_mean",
+    "global_intensity_mean",
+    "sub_metering_1_sum",
+    "sub_metering_2_sum",
+    "sub_metering_3_sum",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "power_lag_1",
+    "power_lag_2",
+    "power_lag_24"
+  ],
+  "coefficients": {
+    "global_active_power_current": 0.41669719868676325,
+    "global_reactive_power_mean": 0.026583205912403984,
+    "voltage_mean": -0.00904898349252986,
+    "global_intensity_mean": 0.4928633157666973,
+    "sub_metering_1_sum": -0.12524684460142935,
+    "sub_metering_2_sum": -0.13182244561030068,
+    "sub_metering_3_sum": -0.12985128674325402,
+    "hour": 0.013502880946007871,
+    "day_of_week": 0.0031990526326259954,
+    "month": -0.014305977818867083,
+    "is_weekend": 0.02734074114000612,
+    "power_lag_1": -0.08614957461440188,
+    "power_lag_2": -0.02622212378509191,
+    "power_lag_24": 0.05838482589039951
+  }
+}
