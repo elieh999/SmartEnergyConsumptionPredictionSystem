@@ -35,13 +35,17 @@ The baseline was trained on 23,780 chronological training observations and teste
 
 The deep learning model is Long Short Term Memory, LSTM. LSTM is suitable for this project because electricity consumption is time based data. It will use the completed readings from the previous 24 hours to predict the average global active power for the following hour. The planned network has one LSTM layer with 32 units and one output neuron.
 
+The LSTM sequence preparation is complete. Each sample contains 24 completed hourly observations with 11 input features per hour and predicts the following hour. This produced 23,636 training sequences, 5,050 validation sequences, and 5,050 test sequences. Windows containing missing hours were excluded. The sequence arrays are generated locally and are not stored in GitHub because they can be recreated from the prepared data.
+
 Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
 
 ## Files
 
 * `prepare_energy_data.py` prepares the data for modeling.
 * `train_linear_regression.py` trains and evaluates the Multiple Linear Regression baseline.
+* `prepare_lstm_sequences.py` creates the 24 hour input sequences for the LSTM model.
 * `reports/preprocessing_summary.json` contains the preprocessing results and row counts.
+* `reports/lstm_sequence_summary.json` contains LSTM sequence counts and input shapes.
 * `results/` contains model metrics, coefficients, and test predictions.
 * `models/linear_regression_model.json` contains the learned baseline model parameters.
 * `docs/AI_Project_Report.docx` is the current project report.

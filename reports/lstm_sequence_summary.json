@@ -1,0 +1,54 @@
+{
+  "model": "LSTM",
+  "sequence_length_hours": 24,
+  "input_feature_count": 11,
+  "input_features": [
+    "global_active_power_current",
+    "global_reactive_power_mean",
+    "voltage_mean",
+    "global_intensity_mean",
+    "sub_metering_1_sum",
+    "sub_metering_2_sum",
+    "sub_metering_3_sum",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend"
+  ],
+  "target": "power_next_hour in kW",
+  "scaling": "z score scaling using training data mean and standard deviation only",
+  "chronological_split": "The end time of each sequence determines its train validation or test split. Earlier observations may be used only as historical input.",
+  "skipped_non_consecutive_windows": 213,
+  "splits": {
+    "train": {
+      "samples": 23636,
+      "input_shape": [
+        23636,
+        24,
+        11
+      ],
+      "first_input_end": "2006-12-18 16:00:00",
+      "last_input_end": "2009-09-11 21:00:00"
+    },
+    "validation": {
+      "samples": 5050,
+      "input_shape": [
+        5050,
+        24,
+        11
+      ],
+      "first_input_end": "2009-09-11 22:00:00",
+      "last_input_end": "2010-04-17 20:00:00"
+    },
+    "test": {
+      "samples": 5050,
+      "input_shape": [
+        5050,
+        24,
+        11
+      ],
+      "first_input_end": "2010-04-17 21:00:00",
+      "last_input_end": "2010-11-26 20:00:00"
+    }
+  }
+}
