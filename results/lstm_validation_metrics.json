@@ -1,0 +1,10 @@
+{
+  "model": "LSTM",
+  "split": "validation",
+  "rows": 5050,
+  "metrics": {
+    "mae_kw": 0.38025036454200745,
+    "rmse_kw": 0.5451642274856567,
+    "r_squared": 0.6263118598212516
+  }
+}
