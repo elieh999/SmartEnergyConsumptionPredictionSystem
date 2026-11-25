@@ -41,7 +41,7 @@ The LSTM was trained for 13 epochs with a batch size of 128 and a learning rate 
 
 On the untouched test data, the LSTM achieved an MAE of 0.329 kW, an RMSE of 0.476 kW, and an R squared value of 0.553. It produced 5,050 next hour predictions.
 
-Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
+Both models were evaluated chronologically. For the final comparison, they were matched to the same 5,050 test hours. The LSTM had the lower MAE and RMSE and the higher R squared value.
 
 ## Result graphs
 
@@ -91,6 +91,21 @@ After the prediction files have been created, run:
 ```bash
 python create_result_graphs.py
 ```
+
+## Reproduce the technical work
+
+Use Python 3.11 or later, install the packages, then run these commands in order:
+
+```bash
+pip install -r requirements.txt
+python prepare_energy_data.py
+python train_linear_regression.py
+python prepare_lstm_sequences.py
+python train_lstm.py --evaluate-test
+python create_result_graphs.py
+```
+
+The raw UCI file must be in `data/raw/` before starting. The tests can be run with `python -m pytest -q`.
 
 ## AI acknowledgement
 

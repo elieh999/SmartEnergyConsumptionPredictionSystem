@@ -111,9 +111,9 @@ def prepare_dataset(raw_file: Path, processed_dir: Path, reports_dir: Path) -> d
     ]
 
     hourly["hour"] = hourly.index.hour
-    hourly["day_of_week"] = hourly.index.dayofweek
+    hourly["day_of_week"] = hourly.index.day_of_week
     hourly["month"] = hourly.index.month
-    hourly["is_weekend"] = (hourly.index.dayofweek >= 5).astype(int)
+    hourly["is_weekend"] = (hourly.index.day_of_week >= 5).astype(int)
     hourly["power_lag_1"] = hourly["global_active_power_current"].shift(1)
     hourly["power_lag_2"] = hourly["global_active_power_current"].shift(2)
     hourly["power_lag_24"] = hourly["global_active_power_current"].shift(24)
