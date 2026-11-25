@@ -7,6 +7,8 @@ split. The test split is deliberately not loaded in this training script.
 
 from __future__ import annotations
 
+import argparse
+import csv
 import json
 import os
 from pathlib import Path
@@ -74,11 +76,25 @@ def predict_in_batches(model: LSTMForecaster, x_values: np.ndarray) -> np.ndarra
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Train the LSTM electricity consumption model.")
+    parser.add_argument(
+        "--evaluate-test",
+        action="store_true",
+        help="evaluate once on the untouched test sequences after training",
+    )
+    args = parser.parse_args()
+
     Tensor.manual_seed(SEED)
     RESULTS_DIR.mkdir(exist_ok=True)
 
     x_train, y_train = load_sequences("train")
     x_validation, y_validation = load_sequences("validation")
+    x_test = y_test = test_end_times = None
+    if args.evaluate_test:
+        test_archive = np.load(DATA_DIR / "lstm_test_sequences.npz")
+        x_test = test_archive["x"]
+        y_test = test_archive["y"]
+        test_end_times = test_archive["end_datetime"]
 
     model = LSTMForecaster(input_features=x_train.shape[2], hidden_units=32)
     optimizer = Adam(nn.state.get_parameters(model), lr=LEARNING_RATE)
@@ -132,6 +148,9 @@ def main() -> None:
             raise RuntimeError("LSTM training did not produce a model state.")
 
         # The metrics below use the validation predictions from the best epoch.
+        test_prediction = None
+        if args.evaluate_test and x_test is not None:
+            test_prediction = predict_in_batches(model, x_test)
 
     validation_results = regression_metrics(y_validation, best_validation_prediction)
 
@@ -161,6 +180,43 @@ def main() -> None:
         ),
         encoding="utf-8",
     )
+
+    if args.evaluate_test and y_test is not None and test_end_times is not None and test_prediction is not None:
+        test_results = regression_metrics(y_test, test_prediction)
+        (RESULTS_DIR / "lstm_test_metrics.json").write_text(
+            json.dumps(
+                {
+                    "model": "LSTM",
+                    "split": "test",
+                    "rows": int(len(y_test)),
+                    "metrics": test_results,
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        with (RESULTS_DIR / "lstm_test_predictions.csv").open("w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(
+                [
+                    "input_end_datetime",
+                    "target_datetime",
+                    "actual_power_next_hour_kw",
+                    "predicted_power_next_hour_kw",
+                    "absolute_error_kw",
+                ]
+            )
+            for end_time, actual, predicted in zip(test_end_times, y_test, test_prediction):
+                writer.writerow(
+                    [
+                        end_time,
+                        str(np.datetime64(end_time) + np.timedelta64(1, "h")),
+                        float(actual),
+                        float(predicted),
+                        float(abs(actual - predicted)),
+                    ]
+                )
+        print(json.dumps({"test_metrics": test_results}, indent=2))
 
     print(json.dumps({"validation_metrics": validation_results, "epochs_completed": len(history["loss"])}, indent=2))
 

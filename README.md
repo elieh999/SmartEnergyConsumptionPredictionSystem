@@ -39,6 +39,8 @@ The LSTM sequence preparation is complete. Each sample contains 24 completed hou
 
 The LSTM was trained for 13 epochs with a batch size of 128 and a learning rate of 0.001. On the validation data, it achieved an MAE of 0.380 kW, an RMSE of 0.545 kW, and an R squared value of 0.626. The final test evaluation is completed separately so that the test data remains untouched during training.
 
+On the untouched test data, the LSTM achieved an MAE of 0.329 kW, an RMSE of 0.476 kW, and an R squared value of 0.553. It produced 5,050 next hour predictions.
+
 Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
 
 ## Files
@@ -50,6 +52,7 @@ Both models will use the same chronological data split. Their predictions will b
 * `reports/preprocessing_summary.json` contains the preprocessing results and row counts.
 * `reports/lstm_sequence_summary.json` contains LSTM sequence counts and input shapes.
 * `results/lstm_training_history.json` and `results/lstm_validation_metrics.json` contain the LSTM training outcome.
+* `results/lstm_test_metrics.json` and `results/lstm_test_predictions.csv` contain the final LSTM test results.
 * `results/` contains model metrics, coefficients, and test predictions.
 * `models/linear_regression_model.json` contains the learned baseline model parameters.
 * `docs/AI_Project_Report.docx` is the current project report.
