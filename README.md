@@ -43,6 +43,12 @@ On the untouched test data, the LSTM achieved an MAE of 0.329 kW, an RMSE of 0.4
 
 Both models will use the same chronological data split. Their predictions will be compared using Mean Absolute Error, MAE, in kilowatts.
 
+## Result graphs
+
+The project includes report ready graphs for the first week of the test period: actual electricity consumption compared with Multiple Linear Regression predictions, actual electricity consumption compared with LSTM predictions, and the LSTM training and validation loss. It also includes an MAE and RMSE comparison graph.
+
+The comparison graph uses the 5,050 test hours shared by both models. The LSTM sequence preparation removes incomplete 24 hour windows, so this matching step makes the comparison fair.
+
 ## Files
 
 * `prepare_energy_data.py` prepares the data for modeling.
@@ -53,6 +59,9 @@ Both models will use the same chronological data split. Their predictions will b
 * `reports/lstm_sequence_summary.json` contains LSTM sequence counts and input shapes.
 * `results/lstm_training_history.json` and `results/lstm_validation_metrics.json` contain the LSTM training outcome.
 * `results/lstm_test_metrics.json` and `results/lstm_test_predictions.csv` contain the final LSTM test results.
+* `create_result_graphs.py` creates report ready prediction, loss, and error comparison graphs.
+* `results/figures/` contains the generated graphs.
+* `results/model_comparison_metrics.json` contains the metrics calculated on the same 5,050 test hours for both models.
 * `results/` contains model metrics, coefficients, and test predictions.
 * `models/linear_regression_model.json` contains the learned baseline model parameters.
 * `docs/AI_Project_Report.docx` is the current project report.
@@ -73,6 +82,14 @@ keep the downloaded file elsewhere and write generated files to temporary folder
 ```bash
 python prepare_energy_data.py --input path/to/household_power_consumption.txt \
   --processed-dir output/data --reports-dir output/reports
+```
+
+## Create the result graphs
+
+After the prediction files have been created, run:
+
+```bash
+python create_result_graphs.py
 ```
 
 ## AI acknowledgement

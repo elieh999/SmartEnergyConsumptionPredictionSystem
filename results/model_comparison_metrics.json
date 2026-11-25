@@ -1,0 +1,14 @@
+{
+  "comparison_rows": 5050,
+  "comparison_note": "Both models are compared only on matching LSTM test windows.",
+  "multiple_linear_regression": {
+    "mae_kw": 0.38701058910689073,
+    "rmse_kw": 0.5253055116288705,
+    "r_squared": 0.45554285061674593
+  },
+  "lstm": {
+    "mae_kw": 0.3292141973028089,
+    "rmse_kw": 0.47609918265843554,
+    "r_squared": 0.5527661552215289
+  }
+}
