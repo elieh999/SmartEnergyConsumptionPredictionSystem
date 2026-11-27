@@ -60,6 +60,7 @@ The comparison graph uses the 5,050 test hours shared by both models. The LSTM s
 * `results/lstm_training_history.json` and `results/lstm_validation_metrics.json` contain the LSTM training outcome.
 * `results/lstm_test_metrics.json` and `results/lstm_test_predictions.csv` contain the final LSTM test results.
 * `create_result_graphs.py` creates report ready prediction, loss, and error comparison graphs.
+* `energy_dashboard.py` opens an interactive desktop dashboard using the saved test predictions.
 * `results/figures/` contains the generated graphs.
 * `results/model_comparison_metrics.json` contains the metrics calculated on the same 5,050 test hours for both models.
 * `results/` contains model metrics, coefficients, and test predictions.
@@ -90,6 +91,16 @@ After the prediction files have been created, run:
 
 ```bash
 python create_result_graphs.py
+```
+
+## Open the project dashboard
+
+The dashboard does not retrain anything. It reads the saved test predictions and
+lets you inspect a test hour, compare both model predictions, and view a small
+chart around that hour.
+
+```bash
+python energy_dashboard.py
 ```
 
 ## Reproduce the technical work
