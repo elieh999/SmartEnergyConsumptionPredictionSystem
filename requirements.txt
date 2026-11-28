@@ -2,3 +2,4 @@ pandas
 pytest
 tinygrad
 matplotlib
+pillow

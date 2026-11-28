@@ -103,6 +103,10 @@ chart around that hour.
 python energy_dashboard.py
 ```
 
+For Windows, a standalone application named `SmartEnergyDashboard.exe` can be
+built with PyInstaller. It bundles the saved prediction files and graphs, so it
+can be opened by double clicking it without opening Python.
+
 ## Reproduce the technical work
 
 Use Python 3.11 or later, install the packages, then run these commands in order:
