@@ -2,4 +2,4 @@ pandas
 pytest
 tinygrad
 matplotlib
-pillow
+PySide6-Essentials
